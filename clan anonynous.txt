@@ -1,0 +1,161 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyOvp2dAKWQRWE9W7gRHzhNq",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/javidsan/PROGCOM-B/blob/main/clan%20anonynous\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "L6GpRTEasGNT",
+        "outputId": "8b86c027-8d5e-4ce6-80ea-473c8b31670a"
+      },
+      "outputs": [
+        {
+          "metadata": {
+            "tags": null
+          },
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Bienvenido a mi floristería\n",
+            "\n",
+            "--- INVENTARIO DE FLORES EN STOCK ---\n",
+            "Flor: margarita | Stock: 10 | Precio: $1200\n",
+            "Flor: azucena | Stock: 20 | Precio: $3000\n",
+            "Flor: rosa | Stock: 30 | Precio: $1200\n",
+            "\n",
+            "¿Qué desea hacer?\n",
+            "1. Comprar flores\n",
+            "2. Pagar\n",
+            "3. Generar factura\n",
+            "4. Salir\n"
+          ]
+        }
+      ],
+      "source": [
+        "flores = {\n",
+        "    \"tipo\": [\"margarita\", \"azucena\", \"rosa\"],\n",
+        "    \"cant\": [10, 20, 30],\n",
+        "    \"precios\": [1200, 3000, 1200]\n",
+        "}\n",
+        "\n",
+        "print(\"Bienvenido a mi floristería\")\n",
+        "\n",
+        "chiste_evasores = \"¡Ojo! No cobramos impuestos... ¡somos evasores de impuestos declarados! 🤫🤫\"\n",
+        "\n",
+        "# Carrito de compras del usuario\n",
+        "compra_user = {\n",
+        "    'tipo': [],\n",
+        "    'cantidad': [],\n",
+        "    'precio': []\n",
+        "}\n",
+        "\n",
+        "while True:\n",
+        "    print(\"\\n--- INVENTARIO DE FLORES EN STOCK ---\")\n",
+        "    for i in range(len(flores['tipo'])):\n",
+        "        print(f\"Flor: {flores['tipo'][i]} | Stock: {flores['cant'][i]} | Precio: ${flores['precios'][i]}\")\n",
+        "\n",
+        "    print(\"\\n¿Qué desea hacer?\")\n",
+        "    print(\"1. Comprar flores\")\n",
+        "    print(\"2. Pagar\")\n",
+        "    print(\"3. Generar factura\")\n",
+        "    print(\"4. Salir\")\n",
+        "\n",
+        "    opc = input(\"Seleccione su opción (1, 2, 3 o 4): \")\n",
+        "\n",
+        "    match opc:\n",
+        "        case \"1\":\n",
+        "            print(\"\\n--- COMPRAR FLORES ---\")\n",
+        "            flor_opc = input(\"¿Qué flor quieres comprar?: \").lower().strip()\n",
+        "\n",
+        "            if flor_opc in flores['tipo']:\n",
+        "                idx = flores['tipo'].index(flor_opc)\n",
+        "                flor_cant = int(input(f\"¿Cuántas unidades de {flor_opc} quieres?: \"))\n",
+        "\n",
+        "                if flor_cant <= flores['cant'][idx]:\n",
+        "                    # Guardamos la compra en el carrito\n",
+        "                    compra_user['tipo'].append(flor_opc)\n",
+        "                    compra_user['cantidad'].append(flor_cant)\n",
+        "                    compra_user['precio'].append(flores['precios'][idx])\n",
+        "\n",
+        "                    # Restamos del stock disponible\n",
+        "                    flores['cant'][idx] = flores['cant'][idx] - flor_cant\n",
+        "                    print(f\"¡Listo! Has agregado {flor_cant} {flor_opc}(s) a tu carrito.\")\n",
+        "                    print(f\"Quedan {flores['cant'][idx]} {flor_opc}(s) en stock.\")\n",
+        "                else:\n",
+        "                    print(\"No tenemos suficiente cantidad de esa flor en stock.\")\n",
+        "            else:\n",
+        "                print(\"Esa flor no está disponible en la tienda.\")\n",
+        "\n",
+        "        case \"2\":\n",
+        "            print(\"\\n--- PROCESO DE PAGO ---\")\n",
+        "            if len(compra_user['tipo']) > 0:\n",
+        "                # Calcular total de la compra\n",
+        "                total_pagar = 0\n",
+        "                for i in range(len(compra_user['tipo'])):\n",
+        "                    total_pagar = total_pagar + (compra_user['cantidad'][i] * compra_user['precio'][i])\n",
+        "\n",
+        "                print(f\"El total acumulado de tu compra es: ${total_pagar}\")\n",
+        "                print(\"¿Cómo deseas realizar el pago?\")\n",
+        "                print(\"1. Efectivo\")\n",
+        "                print(\"2. Tarjeta (a cuotas)\")\n",
+        "                pago_opc = input(\"Selecciona tu método (1 o 2): \")\n",
+        "\n",
+        "                match pago_opc:\n",
+        "                    case \"1\":\n",
+        "                        plata_cliente = float(input(\"¿Con cuánto dinero vas a pagar?: $\"))\n",
+        "                        if plata_cliente >= total_pagar:\n",
+        "                            cambio = plata_cliente - total_pagar\n",
+        "                            print(f\"¡Pago aceptado! Tu cambio es de: ${cambio}\")\n",
+        "                            print(chiste_evasores)\n",
+        "                        else:\n",
+        "                            falta = total_pagar - plata_cliente\n",
+        "                            print(f\"No te alcanza la plata. Te faltan: ${falta}\")\n",
+        "\n",
+        "                    case \"2\":\n",
+        "                        print(\"Opciones de cuotas disponibles: 1, 3, 6, 12 cuotas.\")\n",
+        "                        cuotas = int(input(\"¿A cuántas cuotas deseas financiarlo?: \"))\n",
+        "                        if cuotas in [1, 3, 6, 12]:\n",
+        "                            valor_cuota = total_pagar / cuotas\n",
+        "                            print(f\"¡Pago aprobado! Pagarás {cuotas} cuota(s) de: ${valor_cuota:.2f} cada una.\")\n",
+        "                            print(chiste_evasores)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "h9KI7BpYzZx5"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
